@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="description" content="breast cancer cell classification">
+ <meta name="author" content="ronnelreposo">
+ <link rel="stylesheet" href="css/normalize.css">
+ <link rel="stylesheet" href="css/skeleton.css">
+ 
+ <title>Breast Cancer Cell Classification</title>
+</head>
+<body>
+ <div class="container">
+  <div class="row">
+   <span class="three columns">Clump Thickness</span>
+   <input class="two columns" type="number" id="inp-clump-thick">
+  </div>
+  <div class="row">
+   <span class="three columns">Uniformity of Cell Size:</span>
+   <input class="two columns" type="number" id="inp-uni-cell-size">
+  </div>
+  <div class="row">
+   <span class="three columns">Uniformity of Cell Shape:</span>
+   <input class="two columns" type="number" id="inp-uni-cell-shape">
+  </div>
+  <div class="row">
+   <span class="three columns">Marginal Adhesion:</span>
+   <input class="two columns" type="number" id="inp-marginal-adhesion">
+  </div>
+  <div class="row">
+   <span class="three columns">Single Epithelial Cell Size:</span>
+   <input class="two columns" type="number" id="inp-single-epithe-cell-size">
+  </div>
+  <div class="row">
+   <span class="three columns">Bare Nuclei:</span>
+   <input class="two columns" type="number" id="inp-bare-nucli">
+  </div>
+  <div class="row">
+   <span class="three columns">Bland Chromatin:</span>
+   <input class="two columns" type="number" id="inp-bland-chrom">
+  </div>
+  <div class="row">
+   <span class="three columns">Normal Nucleoli:</span>
+   <input class="two columns" type="number" id="inp-normal-nucle">
+  </div>
+  <div class="row">
+   <span class="three columns">Mitoses:</span>
+   <input class="two columns" type="number" id="inp-mitoses">
+  </div>
+  <div class="row">
+   <button class="button-primary three columns" id="inp-classify">Classify</button>
+   <span class="two columns" id="out-elem" ></span>
+  </div>
+ </div>
+</body>
+ <script type="text/javascript" src="js/rx.all.min.js"></script>
+ <script type="text/javascript" src="js/classifier.js"></script>
+</html>
