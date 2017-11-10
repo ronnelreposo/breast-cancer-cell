@@ -1,4 +1,4 @@
- # breast-cancer-cell #
+ # Breast Cancer Cell Classification #
  **Machine Learning Approach for Breast Cancer Cell Classification**
 
 ## Installation ##
