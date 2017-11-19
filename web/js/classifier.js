@@ -69,6 +69,8 @@ var runClassifierAlgorithm = () => {
  return predicted;
 }; /* end Run Classifier Algo function. */
 
+var getClass = (inputVector) => inputVector[0] > inputVector[1] ? "Benign" : "Malignant";
+
 var classifyButton = document.getElementById('inp-classify');
 var sClassifyClick = Rx.Observable.fromEvent(classifyButton, 'click');
 
@@ -76,5 +78,6 @@ var sClickToEmptyStr = sClassifyClick.map(_ => '');
 var outElem = document.getElementById('out-elem');
 sClickToEmptyStr.subscribe(emptyStr => outElem.innerHTML = emptyStr);
 
-var sClickToPrediction = sClassifyClick.map(_ => runClassifierAlgorithm());
+var sClickToPrediction = sClassifyClick.map(_ => getClass(runClassifierAlgorithm()));
 sClickToPrediction.subscribe(result => outElem.innerHTML = result);
+
