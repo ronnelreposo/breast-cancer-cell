@@ -1,4 +1,8 @@
 "use_strict"
+
+var norm = min => max => value => (value - min) / (max - min);
+var unNorm = min => max => value => min + value * (max - min);
+
 var runClassifierAlgorithm = () => {
  var classifier = (inputs_xs) => {
   /* Mapping of three vectors. */
@@ -50,8 +54,7 @@ var runClassifierAlgorithm = () => {
   var outputWs = weightedSum(secondHiddenWs, outputWeights, outputBias)
   return outputWs.map(Math.tanh);
  }; /* end classify function. */
- var norm = min => max => value => (value - min) / (max - min);
- var unNorm = min => max => value => min + value * (max - min);
+ 
  var inputs = [
   document.getElementById('inp-clump-thick').value,
   document.getElementById('inp-uni-cell-size').value,
@@ -64,12 +67,22 @@ var runClassifierAlgorithm = () => {
   document.getElementById('inp-mitoses').value ];
  var max = 10;
  var normalInputs = inputs.map(norm(1)(max));
- var cent = x => x * 100;
- var predicted = classifier(normalInputs).map(cent);
+ var predicted = classifier(normalInputs);
  return predicted;
 }; /* end Run Classifier Algo function. */
 
-var getClass = (inputVector) => inputVector[0] > inputVector[1] ? "Benign" : "Malignant";
+var getClass = (inputVector) => {
+ var scale = norm(-1)(1);
+ var toPercentage = x => {
+  var scaled = scale(x);
+  var cent = x => x * 100;
+  return scaled < 0 ? 0 : Math.round(cent(scaled));
+ } 
+ var toPercentageStr = x => toPercentage(x);
+ var benignPercent = toPercentageStr(inputVector[0]);
+ var malginantPercent = toPercentageStr(inputVector[1]);
+ return "Benign: " + benignPercent + "%, " + "Malignant: " + malginantPercent + "%";
+} /* end getClass*/
 
 var classifyButton = document.getElementById('inp-classify');
 var sClassifyClick = Rx.Observable.fromEvent(classifyButton, 'click');
