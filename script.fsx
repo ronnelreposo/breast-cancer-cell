@@ -57,17 +57,6 @@ let shuffle xs =
   List.permute (fun i -> shuffled.[i]) xs
  f (System.Random()) xs
 
-/// Retrieves the value of data on a list given the list of index.
-let dataAtIndex  xs_data xs_index =
- let rec f data_xs index_xs acc =
-  match index_xs with
-  | [] -> List.rev acc
-  | hd::tl -> (f data_xs tl ((List.item hd data_xs)::acc))
- f xs_data xs_index List.empty
-
-/// Maps a scalar to a vector using a mapper function.
-let scalarToVecOp mapper x ys = List.map (mapper x) ys
-
 /// Maps the elements the first list (xs) to second list (ys) using the mapper function.
 /// first, it gets the first element of first list (xs) and maps to second list (ys)
 /// using the mapper function. i.e. (List.map (mapper x) ys).
