@@ -3,6 +3,10 @@
 open System.IO;
 open System.Text.RegularExpressions;
 
+type Vector = Vector of float list
+type Matrix = Matrix of float list list
+
+
 /// Matrix Transpose.
 let transpose xss =
  let rec f xss acc =
