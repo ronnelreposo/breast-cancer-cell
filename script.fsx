@@ -63,9 +63,9 @@ let shuffle xs =
 /// Finally it returns the accumulated mapped list.
 /// mapToSecondList (+) ["1"; "2"; "3"] ["2"; "3", "4"] =
 /// [ ["12"; "13"; "14"]; ["22"; "23"; "24"]; ["32"; "33"; "34"] ].
-let mapToSecondList mapper xs ys =
- let rec f mapper xs ys acc = match xs with | [] -> List.rev acc | hd::tl -> f mapper tl ys <| (List.map (mapper hd) ys)::acc
- f mapper xs ys List.empty
+let mapToSecondList f xs ys =
+    let mapEach x = List.map (f x) ys
+    List.map mapEach xs
 
 /// Scalar Vector Multiplication.
 let smul c xs = List.map ((*) c) xs
