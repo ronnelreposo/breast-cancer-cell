@@ -39,14 +39,6 @@ let distance xs ys =
   |> sqrt
   |> (*) 0.5
 
-/// Euclid Norm.
-let rec norm xs =
- let rec f xs acc =
-  match xs with
-  | [] -> List.sum acc |> sqrt
-  | hd::tl -> f tl ((square hd)::acc)
- f xs List.empty
-
 ///Shuffle List (Fisher Yates Alogrithm).
 let shuffle xs =
  let f (rand: System.Random) (xs:List<'a>) =
