@@ -68,13 +68,13 @@ let mapToSecondList f xs ys =
     List.map mapEach xs
 
 /// Scalar Vector Multiplication.
-let smul c xs = List.map ((*) c) xs
+let smul c = List.map ((*) c)
 
 /// Vector Multiplication.
-let mul xs ys = List.map2 (*) xs ys
+let mul = List.map2 (*)
 
 /// Vector Addition.
-let add xs ys = List.map2 (+) xs ys
+let add = List.map2 (+)
 
 /// Logistic Sigmoid.
 let logSigmoid x = (/) 1.0 ((+) 1.0 (exp -x))
