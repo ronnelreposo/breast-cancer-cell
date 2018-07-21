@@ -59,7 +59,7 @@ let shuffle xs =
 
 /// Maps the elements the first list (xs) to second list (ys) using the mapper function.
 /// first, it gets the first element of first list (xs) and maps to second list (ys)
-/// using the mapper function. i.e. (List.map (mapper x) ys).
+/// using the mapper function. i.e. (List.map (f x) ys).
 /// Finally it returns the accumulated mapped list.
 /// mapToSecondList (+) ["1"; "2"; "3"] ["2"; "3", "4"] =
 /// [ ["12"; "13"; "14"]; ["22"; "23"; "24"]; ["32"; "33"; "34"] ].
