@@ -95,7 +95,7 @@ let gradient dFunc output target = (*) <| dFunc output <| (-) target output
 
 /// Weighted Sum with Bias.
 let weightedSum inputs weights bias = add bias <| List.map (dot inputs) weights
-
+let someVector = Vector >> Some
 /// Delta or The Rate of Change.
 let deltas learningRate gradients netOutputs = List.map <| smul learningRate <| mapToSecondList (*) gradients netOutputs
 
