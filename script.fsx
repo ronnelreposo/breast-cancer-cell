@@ -7,6 +7,16 @@ open System.Text.RegularExpressions
 type Scalar = Scalar of float
 type Vector = Vector of float list
 
+type Lens<'S, 'A> = {
+ Get: 'S -> 'A
+ Set: 'A -> 'S -> 'S 
+}
+let (-=<) lensab lensbc = {
+ Get = lensab.Get >> lensbc.Get
+ Set = fun c a -> lensab.Set (lensbc.Set c (lensab.Get a)) a
+}
+
+
 /// Matrix Transpose.
 let transpose xss =
     let rec f xss acc =
@@ -124,44 +134,75 @@ type Network = {
     TargetOutputs     : float list
     }
 
+let netInputsLens = {
+    Get = fun net -> net.Inputs
+    Set = fun inputs net -> { net with Inputs = inputs }
+}
+let netFstHidLayerLens = {
+    Get = fun net -> net.FirstHiddenLayer
+    Set = fun layer net -> { net with FirstHiddenLayer = layer }
+}
+let netSndHidLayerLens = {
+    Get = fun net -> net.SecondHiddenLayer
+    Set = fun layer net -> { net with SecondHiddenLayer = layer }
+}
+let netOutLayerLens = {
+    Get = fun net -> net.OutputLayer
+    Set = fun layer net -> { net with OutputLayer = layer }
+}
+let layerInputsLens:Lens<Layer, float list> = {
+    Get = fun layer -> layer.Inputs
+    Set = fun inputs layer -> { layer with Inputs = inputs }
+}
+let layerWeightsLens = {
+    Get = fun layer -> layer.Weights
+    Set = fun weights layer -> { layer with Weights = weights }
+}
+let layerBiasLens = {
+    Get = fun layer -> layer.Bias
+    Set = fun bias layer -> { layer with Bias = bias }
+}
+let layerNetOutputsLens = {
+    Get = fun layer -> layer.NetOutputs
+    Set = fun netOutputs layer -> { layer with NetOutputs = netOutputs }
+}
+
+let netFstHidLayerLayerInputsLens = netFstHidLayerLens -=< layerInputsLens
+let netFstLayerWeightsLens = netFstHidLayerLens -=< layerWeightsLens
+let netFstLayerBiasLens = netFstHidLayerLens -=< layerBiasLens
+let netFstHidLayerLayerNetOutputsLens = netFstHidLayerLens -=< layerNetOutputsLens
+
+let netSndHidLayerLayerInputsLens = netSndHidLayerLens -=< layerInputsLens
+let netSndLayerWeightsLens = netSndHidLayerLens -=< layerWeightsLens
+let netSndLayerBiasLens = netSndHidLayerLens -=< layerBiasLens
+let netSndHidLayerLayerNetOutputsLens = netSndHidLayerLens -=< layerNetOutputsLens
+
+let netOutLayerLayerInputsLens = netOutLayerLens -=< layerInputsLens
+let netOutLayerWeightsLens = netOutLayerLens -=< layerWeightsLens
+let netOutLayerBiasLens = netOutLayerLens -=< layerBiasLens
+let netOutLayerLayerNetOutputsLens = netOutLayerLens -=< layerNetOutputsLens
+
 let feedForward net =
 
- let firstHiddenWeightedSum  = weightedSum
-                                          net.Inputs net.FirstHiddenLayer.Weights
-                                          net.FirstHiddenLayer.Bias
- let firstHiddenNetOutputs   = List.map tanh firstHiddenWeightedSum
- let secondHiddenWeightedSum = weightedSum
-                                          firstHiddenNetOutputs
-                                          net.SecondHiddenLayer.Weights
-                                          net.SecondHiddenLayer.Bias
- let secondHiddenNetOutputs  = List.map tanh secondHiddenWeightedSum
- let outputWeightedSum       = weightedSum
-                                          secondHiddenNetOutputs
-                                          net.OutputLayer.Weights
-                                          net.OutputLayer.Bias
- let outputs                 = List.map tanh outputWeightedSum
- 
- { net with
-     FirstHiddenLayer =
-      {
-          net.FirstHiddenLayer with
-              Inputs     = net.Inputs
-              NetOutputs = firstHiddenNetOutputs
-      }
-     SecondHiddenLayer =
-      {
-          net.SecondHiddenLayer with
-             Inputs     = firstHiddenNetOutputs
-             NetOutputs = secondHiddenNetOutputs
-      }
-     OutputLayer =
-      {
-         net.OutputLayer with
-             Inputs     = secondHiddenNetOutputs
-             NetOutputs = outputs
-      }
-  }
+ let firstHiddenNetOutputs = List.map tanh <| weightedSum (netInputsLens.Get net)
+                                                          (netFstLayerWeightsLens.Get net)
+                                                          (netFstLayerBiasLens.Get net)
 
+ let secondHiddenNetOutputs = List.map tanh <| weightedSum firstHiddenNetOutputs
+                                                          (netSndLayerWeightsLens.Get net)
+                                                          (netSndLayerBiasLens.Get net)
+
+ let outputs = List.map tanh <| weightedSum secondHiddenNetOutputs
+                                            (netOutLayerWeightsLens.Get net)
+                                            (netOutLayerBiasLens.Get net)
+
+ net
+    |> netFstHidLayerLayerInputsLens.Set net.Inputs
+    |> netFstHidLayerLayerNetOutputsLens.Set firstHiddenNetOutputs
+    |> netSndHidLayerLayerInputsLens.Set firstHiddenNetOutputs
+    |> netSndHidLayerLayerNetOutputsLens.Set secondHiddenNetOutputs
+    |> netOutLayerLayerInputsLens.Set secondHiddenNetOutputs
+    |> netOutLayerLayerNetOutputsLens.Set outputs
 
 let bpOutputLayer n m tOutputs (layer:Layer) =
     let grads               = List.map2 (gradient deltaTanH) layer.NetOutputs tOutputs
@@ -396,3 +437,4 @@ let trained = trainedNet allData
 
 printfn "Testing Model Accuracy: Crunching All Data..."
 let modelAccuracy = accuracy trained allData
+
