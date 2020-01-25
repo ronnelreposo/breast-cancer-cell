@@ -1,5 +1,7 @@
 "use_strict"
 
+import { Observable } from 'rxjs';
+
 var norm = min => max => value => (value - min) / (max - min);
 var unNorm = min => max => value => min + value * (max - min);
 
@@ -73,10 +75,10 @@ var runClassifierAlgorithm = () => {
 
 var getClass = (inputVector) => {
  var scale = norm(-1)(1);
- var toPercentage = x => {
+ var toPercentage = (x: number) => {
   var scaled = scale(x);
   var cent = x => x * 100;
-  return scaled < 0 ? 0 : Math.round(cent(scaled));
+  return scaled < 0 ? 0 : cent(scaled).toFixed(2);
  } 
  var toPercentageStr = x => toPercentage(x);
  var benignPercent = toPercentageStr(inputVector[0]);
@@ -85,7 +87,7 @@ var getClass = (inputVector) => {
 } /* end getClass*/
 
 var classifyButton = document.getElementById('inp-classify');
-var sClassifyClick = Rx.Observable.fromEvent(classifyButton, 'click');
+var sClassifyClick = Observable.fromEvent(classifyButton, 'click');
 
 var sClickToEmptyStr = sClassifyClick.map(_ => '');
 var outElem = document.getElementById('out-elem');
