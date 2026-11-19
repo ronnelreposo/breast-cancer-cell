@@ -1,46 +1,28 @@
- # Breast Cancer Cell Classification #
- **Machine Learning Approach for Breast Cancer Cell Classification**
+# Breast Cancer Cell Classification
 
-## Installation ##
+This was my first encounter with the wonder of neural networks. Long before the generative AI boom, I wanted to understand how a network could learn, so I built one in F# and experimented with breast cancer cell classification.
 
-- **Users** If you just want to browse the webpage application. You can have the [Web App](https://github.com/ronnelreposo/breast-cancer-cell/tree/master/web).
-- **Developers, Data Scientist or Data Analyst** Install [Visual Studio 2015](https://www.visualstudio.com/downloads/) or F# project IDE would do.
+The code is rough, and I would write it very differently today. I've kept it as it was for sentimental reasons: it reminds me of the curiosity that started my journey into neural networks.
 
-## Usage ##
+This is a historical learning project, not a medical tool. It is not intended for diagnosis or clinical use.
 
-- **Users** Play around the Application using the [Data](https://github.com/ronnelreposo/cardiotocography/blob/master/data%20and%20error/cardiotocography.xlsx).
+## What is here
 
-- **Developers, Data Scientist and Data Analyst**
-  - If you want to **Retrain The Model**, you can run the [script file](https://github.com/ronnelreposo/breast-cancer-cell/blob/master/script.fsx) in F# interactive.
+- `script.fsx` contains a feed-forward neural network and backpropagation implementation, along with data loading and training code.
+- `dataset/` contains the data used by the experiment.
+- `dat/` contains experiment outputs.
+- `web/` contains the accompanying web application.
 
-## Contribute ##
+The network uses two hidden layers and was written in F# using list operations and record types. The script also includes an accuracy calculation; its results should not be interpreted as independently validated clinical performance.
 
- - [Issue Tracker](https://github.com/ronnelreposo/breast-cancer-cell/issues)
- - [Source Code: Script](https://github.com/ronnelreposo/breast-cancer-cell/blob/master/script.fsx)
- - [Dataset: Data and Error](https://github.com/ronnelreposo/breast-cancer-cell/tree/master/dataset)
+## Running the historical experiment
 
-## Credits ##
-Dataset Creators:
+The script was written for an older F# environment. Before running it in F# Interactive, inspect the paths in `script.fsx` and replace the hard-coded Windows dataset and output paths with locations on your machine. The original setup used Visual Studio 2015; compatibility with current tooling has not been verified.
 
-  1. **Dr. William H. Wolberg**, General Surgery Dept. 
-  University of Wisconsin, Clinical Sciences Center 
-  Madison, WI 53792 
-  *wolberg '@' eagle.surgery.wisc.edu*
+## Data and credits
 
-  1. **W. Nick Street**, Computer Sciences Dept. 
-  University of Wisconsin, 1210 West Dayton St., Madison, WI 53706 
-  *street '@' cs.wisc.edu* 608-262-6619 
+The project uses a breast cancer dataset attributed to Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian, via the [UCI Machine Learning Repository](https://archive.ics.uci.edu/). See `dataset/` for the files included in this repository.
 
-  1. **Olvi L. Mangasarian**, Computer Sciences Dept. 
-  University of Wisconsin, 1210 West Dayton St., Madison, WI 53706 
-  *olvi '@' cs.wisc.edu* 
+## License
 
-  Dataset from: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets.html).
-
-## Support ##
-
- *If your having difficulties please let me know.* @ronnelreposo [Ronnel Reposo](ronnel.reposo@gmail.com)
-
-## License ##
- 
-The project is licensed under the **MIT** license - see the [LICENSE](https://github.com/ronnelreposo/breast-cancer-cell/blob/master/LICENSE) file for details.
+[MIT](LICENSE)
